@@ -10,15 +10,17 @@ if(isset($_POST['submit'])){
         $new_user = array(
             "username" => $_POST['username'],
             "passwordHash" => $_POST['passwordHash'],
-            "email" => $_POST['email']
+            "email" => $_POST['email'],
+            "points" => $_POST['points']
         );
 
         $sql = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
+            "INSERT INTO %s (%s) VALUES (%s)",
             "users",
             implode(", ", array_keys($new_user)),
-            ":" . implode(", :",array_keys($new_user))
+            ":username, HASHBYTES('SHA2_512', :passwordHash), :email, :points"
         );
+            // ":" . implode(", :",array_keys($new_user))
 
         $statement = $connection->prepare($sql);
         $statement->execute($new_user);
